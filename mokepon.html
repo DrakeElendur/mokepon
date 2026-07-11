@@ -4,6 +4,7 @@
         <meta charset="UTF-8"/>
         <title>¡Mokepon!</title>
         <link rel="stylesheet" href="./styles.css"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
     </head>
     <body>
         <section id="pet-selection">
@@ -15,12 +16,14 @@
         </section>
 
         <section id="map-selection">
-            <h1 class="title">🔥💧🌱 ¡Recorre el mapa con tu Mokepon! 🔥💧🌱</h1>
+            <h2 class="subtitle">🔥💧🌱 ¡Recorre el mapa con tu Mokepon! 🔥💧🌱</h2>
             <canvas id="map"></canvas>
             <button onmouseup="detenerMovimiento()" onmousedown="moverArriba()">Arriba</button>
-            <button onmouseup="detenerMovimiento()" onmousedown="moverIzquierda()">Izquierda</button>
-            <button onmouseup="detenerMovimiento()" onmousedown="moverAbajo()">Abajo</button>
-            <button onmouseup="detenerMovimiento()" onmousedown="moverDerecha()">Derecha</button>
+            <div>
+                <button onmouseup="detenerMovimiento()" onmousedown="moverIzquierda()">Izquierda</button>
+                <button onmouseup="detenerMovimiento()" onmousedown="moverAbajo()">Abajo</button>
+                <button onmouseup="detenerMovimiento()" onmousedown="moverDerecha()">Derecha</button>
+            </div>
         </section>
     
         <section id="attack-selection">

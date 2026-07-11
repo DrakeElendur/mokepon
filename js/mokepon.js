@@ -1,3 +1,4 @@
+"use strict"
 const sectionRestart = document.getElementById("restart")
 const buttonPet = document.getElementById("btn-pet")
 const sectionAttackSelection = document.getElementById("attack-selection")
@@ -46,20 +47,32 @@ let lifePlayer = 3
 let lifeEnemy = 3
 let lienzo = map.getContext("2d")
 let intervalo
+let enCombate = false
 let mapaBackground = new Image()
 mapaBackground.src = "./images/mokemap.png"
+let alturaQueBuscamos
+let anchoDelMapa = window.innerWidth - 20
+const anchoMaximoDelMapa = 800
+
+if (anchoDelMapa > anchoMaximoDelMapa) {
+    anchoDelMapa = anchoMaximoDelMapa - 30
+}
+
+alturaQueBuscamos = anchoDelMapa * 600 / 800
+map.width = anchoDelMapa
+map.height = alturaQueBuscamos
 
 
 class Mokepon {
-    constructor(nombre, foto, vida,fotoMapa, x = 10, y = 10) {
+    constructor(nombre, foto, vida,fotoMapa,) {
         this.nombre = nombre
         this.foto = foto
         this.vida = vida
         this.ataques = []
-        this.x = x
-        this.y = y
         this.ancho = 120
         this.alto = 65
+        this.x = aleatorio(0, map.width - this.ancho)
+        this.y = aleatorio(0, map.height - this.alto)
         this.mapaFoto = new Image()
         this.mapaFoto.src = fotoMapa
         this.velocidadX = 0
@@ -84,12 +97,12 @@ let langostelvis = new Mokepon("Langostelvis", "./images/langostelvis.png", 5, "
 let tucapalma = new Mokepon("Tucapalma", "./images/tucapalma.png", 5, "./images/tucapalma.png")
 let pydos = new Mokepon("Pydos", "./images/pydos.png", 5, "./images/pydos.png")
 // Instancias de Mokepones enemigos
-let hipodogeEnemy = new Mokepon("Hipodoge", "./images/hipodoge.png", 5, "./images/hipodoge.png", 400, 40)
-let capipepoEnemy = new Mokepon("Capipepo", "./images/capipepo.png", 5, "./images/capipepo.png", 100, 250)
-let ratigueyaEnemy = new Mokepon("Ratigueya", "./images/ratigueya.png", 5, "./images/ratigueya.png", 550, 250)
-let langostelvisEnemy = new Mokepon("Langostelvis", "./images/langostelvis.png", 5, "./images/langostelvis.png", 320, 420)
-let tucapalmaEnemy = new Mokepon("Tucapalma", "./images/tucapalma.png", 5, "./images/tucapalma.png", 60, 470)
-let pydosEnemy = new Mokepon("Pydos", "./images/pydos.png", 5, "./images/pydos.png", 590, 460)
+let hipodogeEnemy = new Mokepon("Hipodoge", "./images/hipodoge.png", 5, "./images/hipodoge.png")
+let capipepoEnemy = new Mokepon("Capipepo", "./images/capipepo.png", 5, "./images/capipepo.png")
+let ratigueyaEnemy = new Mokepon("Ratigueya", "./images/ratigueya.png", 5, "./images/ratigueya.png")
+let langostelvisEnemy = new Mokepon("Langostelvis", "./images/langostelvis.png", 5, "./images/langostelvis.png")
+let tucapalmaEnemy = new Mokepon("Tucapalma", "./images/tucapalma.png", 5, "./images/tucapalma.png")
+let pydosEnemy = new Mokepon("Pydos", "./images/pydos.png", 5, "./images/pydos.png")
 
 hipodoge.ataques.push(
     { nombre: "💧", id: "btn-water" },
@@ -435,8 +448,6 @@ function sePresionoUnaTecla(event) {
 }
 
 function iniciarMapa() {
-    map.width = 800
-    map.height = 600
     playerPetObject = obtenerObjetoMascota(playerPet)
     intervalo = setInterval(pintarMapa, 50)
     window.addEventListener("keydown", sePresionoUnaTecla)
@@ -453,6 +464,7 @@ function obtenerObjetoMascota(playerPet) {
 }
 
 function revisarColision(enemigo) {
+    if (enCombate) return
     const arribaEnemigo = enemigo.y
     const abajoEnemigo = enemigo.y + enemigo.alto
     const derechaEnemigo = enemigo.x + enemigo.ancho
@@ -471,6 +483,7 @@ function revisarColision(enemigo) {
     ) {
         return
     }
+    enCombate = true
     detenerMovimiento()
     clearInterval(intervalo)
     sectionAttackSelection.style.display = "flex"
